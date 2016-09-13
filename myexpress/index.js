@@ -2,6 +2,7 @@ var express = require("express")
 
 var app = express();
 
+var fortune = require('./lib/fortune.js');
 
 var handlebars = require('express3-handlebars')
     .create({defaultLayout: 'main'});
@@ -26,10 +27,8 @@ app.get('/', function (req, res) {
 
 
 app.get('/about', function (req, res) {
-  var randomTest =
-      testArray[Math.floor(Math.random() * testArray.length)];
   res.render('about', {
-    testArray: randomTest,
+    testArray: fortune.getFortune(),
     pageTestScript: '/qa/tests-about.js'
   });
 });
@@ -65,8 +64,3 @@ app.listen(app.get('port'), function () {
 
 
 
-var testArray = [
-  "1",
-  "2",
-  "3"
-];
