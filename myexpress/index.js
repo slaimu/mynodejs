@@ -5,7 +5,18 @@ var app = express();
 var fortune = require('./lib/fortune.js');
 
 var handlebars = require('express3-handlebars')
-    .create({defaultLayout: 'main'});
+    .create({
+      defaultLayout: 'main',
+      helpers: {
+        section: function (name, options) {
+          if (!this._sections) {
+            this._sections = {};
+          }
+          this._sections[name] = options.fn(this);
+          return null;
+        }
+      }
+    });
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -52,7 +63,9 @@ app.get('/tours/request-group-rate', function (req, res) {
   res.render('tours/request-group-rate');
 });
 
-
+app.get('/jquerytest', function (req, res) {
+  res.render('jquerytest');
+});
 
 
 app.use(function (req, res) {
