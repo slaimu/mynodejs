@@ -19,11 +19,14 @@ var handlebars = require('express3-handlebars')
         }
       }
     });
+var credentials = require('./credentials.js');
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.set('port', process.env.PORT || 3000);
 
+app.use(require('cookie-parser')(credentials.cookieSecret));
 
 app.use(express.static(__dirname + '/public'));
 
@@ -82,6 +85,10 @@ app.post('/contest/vacation-photo/:year/:month', function(req, res){
 
 
 app.get('/', function (req, res) {
+  res.cookie('monster', 'nom nom');
+  res.cookie('signed_monster', 'nom nom', {signed: true});
+  console.log(req.cookies.monster);
+  console.log(req.signedCookies.signed_monster);
   res.render('home');
 });
 
