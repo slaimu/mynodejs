@@ -19,7 +19,34 @@ var handlebars = require('express3-handlebars')
         }
       }
     });
+
+var nodemailer = require('nodemailer');
 var credentials = require('./credentials.js');
+
+
+var mailTransport = nodemailer.createTransport('SMTP', {
+  service: 'Gmail',
+  auth: {
+    user: credentials.gmail.user,
+    pass: credentials.gmail.password
+  }
+});
+
+
+
+mailTransport.sendMail(
+  {
+    form: 'xiaowu.zhangv@gmail.com',
+    to: 'xiaowu.zhangv@gmail.com',
+    subject: 'mail test',
+    text: 'mail test'
+  },
+  function (err) {
+    if (err) {
+      console.error('unable to send email:' + err);
+    }
+  }
+);
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
