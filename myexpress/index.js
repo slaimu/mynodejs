@@ -58,6 +58,17 @@ app.use(require('cookie-parser')(credentials.cookieSecret));
 app.use(express.static(__dirname + '/public'));
 
 
+switch(app.get('env')) {
+case 'development':
+  app.use(require('morgan')('dev'));
+  break;
+case 'production':
+  app.use(require('express-logger')({
+    path: __dirname + '/log/requests.log'
+  }));
+}
+
+
 app.use(function (req, res, next) {
   if (! res.locals.partials) {
     res.locals.partials = {};
@@ -203,7 +214,8 @@ app.use(function (err, req, res, next) {
 
 
 app.listen(app.get('port'), function () {
-  console.log('Express started on http://localhost:' + app.get('port') +
+  console.log('Express started in ' + app.get('env') +
+              ' mode on http://localhost:' + app.get('port') +
               '; press Ctrl + C to terminate');
 });
 
