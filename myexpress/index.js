@@ -85,6 +85,16 @@ app.use(function (req, res, next) {
   next();
 })
 
+
+app.use(function (req, res, next) {
+  var cluster = require('cluster');
+  if (cluster.isWorker) {
+    console.log('worker %d received request', cluster.worker.id);
+  }
+  next();
+});
+
+
 app.use(require('body-parser')());
 
 app.get('/newsletter', function (req, res) {
@@ -198,6 +208,8 @@ app.get('/data/nursery-rhyme', function (req, res) {
   });
 });
 
+
+
 app.use(function (req, res) {
   res.status(404)
   res.render('404');
@@ -212,12 +224,20 @@ app.use(function (err, req, res, next) {
   res.render('500');
 });
 
+function startServer() {
+  app.listen(app.get('port'), function () {
+    console.log('Express started in ' + app.get('env') +
+                ' mode on http://localhost:' + app.get('port') +
+                '; press Ctrl + C to terminate');
+  });
+}
 
-app.listen(app.get('port'), function () {
-  console.log('Express started in ' + app.get('env') +
-              ' mode on http://localhost:' + app.get('port') +
-              '; press Ctrl + C to terminate');
-});
+
+if (require.main === module) {
+  startServer();
+} else {
+  module.exports = startServer;
+}
 
 
 function getWeatherData(){
