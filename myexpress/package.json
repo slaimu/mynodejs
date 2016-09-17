@@ -15,6 +15,7 @@
     "express-logger": "0.0.3",
     "express3-handlebars": "^0.5.2",
     "formidable": "^1.0.17",
+    "loadtest": "^2.0.2",
     "morgan": "^1.7.0",
     "nodemailer": "^2.6.0"
   },
