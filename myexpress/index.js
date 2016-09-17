@@ -53,6 +53,39 @@ app.set('view engine', 'handlebars');
 
 app.set('port', process.env.PORT || 3000);
 
+app.use(function (req, res, next) {
+  var domain = require('domain').create();
+  domain.on('error', function (err) {
+    console.error('Domain Error Caught\n', err.stack);
+    try {
+      setTimeout(function () {
+        console.error('Failsafe shutdown.');
+        process.exit(1);
+      }, 5000);
+      var worker = require('cluster').worker;
+      if (worker) {
+        work.disconnect();
+      }
+      server.close();
+      try {
+        next(err);
+      } catch(err) {
+        console.error('Express error mechanism failed.\n', err.stack);
+        req.statusCode = 500;
+        res.setHeader('content-type', 'text/plain');
+        res.end('Server error');
+      };
+    } catch (err) {
+      console.error('Unable to send 500 response.\n', err.stack);
+    }
+  });
+  domain.add(req);
+  domain.add(res);
+  domain.run(next);
+});
+
+
+
 app.use(require('cookie-parser')(credentials.cookieSecret));
 
 app.use(express.static(__dirname + '/public'));
@@ -170,6 +203,18 @@ app.get('/', function (req, res) {
   console.log(req.cookies.monster);
   console.log(req.signedCookies.signed_monster);
   res.render('home');
+});
+
+
+
+app.get('/fail', function (req, res) {
+  throw new Error('Nope!');
+});
+
+app.get('/epic-fail', function (req, res) {
+  process.nextTick(function () {
+    throw new Error('kaboom!');
+  });
 });
 
 
