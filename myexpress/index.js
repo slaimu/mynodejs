@@ -359,6 +359,28 @@ app.get('/data/nursery-rhyme', function (req, res) {
 
 
 
+
+/*
+var autoviews = {};
+var fs = require('fs');
+
+app.use(function (req, res, next) {
+  var path = req.path.toLowerCase();
+
+  if (autoViews[path]) {
+    return res.render(autoViews[path]);
+  }
+
+  if (fs.existsSync(__dirname + '/views' + path + '.handlebars')) {
+    autoViews[path] = path.replace(/^\//, '');
+    return res.render(autoViews[paths];
+  }
+  next();
+});
+
+*/
+
+
 app.use(function (req, res) {
   res.status(404)
   res.render('404');
