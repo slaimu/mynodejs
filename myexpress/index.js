@@ -6,6 +6,7 @@ var formidable = require('formidable');
 
 var fortune = require('./lib/fortune.js');
 
+
 var rest = require('connect-rest');
 var Attraction = require('./models/attraction.js');
 
@@ -384,8 +385,27 @@ app.use(function (req, res, next) {
   next();
 });
 
+
+
 */
 
+
+
+
+/*
+
+
+var https = require('https');
+var options = {
+  key: fs.readFileSync(__dirname + '/ssl/meadowlark.pem');
+  cert: fs.readFileSync(__dirname + '/ssl/meadowlark.crt');
+};
+https.createServer(options, app).listen(app.get('port'), function(){
+  console.log('Express started in ' + app.get('env') +
+              ' mode on port ' + app.get('port') + '.');
+});
+
+*/
 
 
 var apiOptions = {
