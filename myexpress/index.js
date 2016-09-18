@@ -13,6 +13,9 @@ var handlebars = require('express3-handlebars')
     .create({
       defaultLayout: 'main',
       helpers: {
+        static: function (name) {
+          return require('./lib/static.js').map(name);
+        },
         section: function (name, options) {
           if (!this._sections) {
             this._sections = {};
